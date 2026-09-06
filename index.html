@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vaelo Bay Resort — Cliffside Escape, Sri Lanka</title>
+<meta name="description" content="Vaelo Bay Resort — villas set into a natural cliffside on Sri Lanka's south coast. Book your stay directly on WhatsApp.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<!-- NAV -->
+<header class="nav" id="nav">
+  <a href="#top" class="nav__mark">Vaelo Bay</a>
+  <nav class="nav__links">
+    <a href="#about">The Resort</a>
+    <a href="#villas">Villas</a>
+    <a href="#experiences">Experiences</a>
+    <a href="#reviews">Reviews</a>
+    <a href="#gallery">Gallery</a>
+    <a href="#contact">Contact</a>
+    <a href="#book" class="nav__cta">Book a stay</a>
+  </nav>
+  <button class="nav__burger" id="burger" aria-label="Open menu">
+    <span></span><span></span>
+  </button>
+</header>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about">The Resort</a>
+  <a href="#villas">Villas</a>
+  <a href="#experiences">Experiences</a>
+  <a href="#reviews">Reviews</a>
+  <a href="#gallery">Gallery</a>
+  <a href="#contact">Contact</a>
+  <a href="#book">Book a stay</a>
+</div>
+
+<!-- HERO — split layout: text left, photo right -->
+<section class="hero" id="top">
+  <div class="hero__text">
+    <p class="hero__eyebrow" data-reveal>Ahangama, South Coast · Sri Lanka</p>
+    <h1 class="hero__title">
+      <span class="line" data-reveal-line><span>A resort built</span></span>
+      <span class="line" data-reveal-line><span>into nature,</span></span>
+      <span class="line hero__title--em" data-reveal-line><span>not over it.</span></span>
+    </h1>
+    <p class="hero__sub" data-reveal>Fourteen villas set among the rock and tree line, forty feet above the tide. Book directly, no middleman.</p>
+    <div class="hero__actions" data-reveal>
+      <a href="#book" class="btn btn--primary">Reserve your villa</a>
+      <a href="#about" class="btn btn--ghost">Explore the resort ↓</a>
+    </div>
+
+    <div class="hero__scroll">
+      <span></span>
+      <p>Scroll</p>
+    </div>
+  </div>
+
+  <div class="hero__media" id="heroBg">
+    <img src="https://www.llamatravel.com/media/image-cache/969b6dc2-dca5-449a-9d9b-896fb4e14007/2248-0--1125-750/1778773079-pool-kandy-myst.jpg" alt="Vaelo Bay Resort pool overlooking the natural coastline" loading="eager">
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="resort" id="about">
+  <div class="resort__head">
+    <p class="section-tag">The Resort</p>
+    <h2 class="resort__heading">Fourteen villas, one stretch of <span class="heading-accent">untouched coast</span></h2>
+  </div>
+
+  <div class="resort__bento">
+    <div class="bento-item bento-item--tall" data-clip-reveal>
+      <img src="https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=1000&q=80" alt="Villa terrace in a natural coastal setting" loading="lazy">
+    </div>
+
+    <div class="bento-item bento-item--text">
+      <p class="about__body">In 2019, three fishing families sold their cliffside plots to a single architect with one condition — build with the land, not over it. Vaelo Bay is the result: villas terraced into the natural rock, joined by stairways cut from the same stone.</p>
+      <p class="about__body">Every room faces water. Every terrace catches the wind before it reaches the garden below.</p>
+      <a href="#villas" class="bento-item__link">See the villas →</a>
+    </div>
+
+    <div class="bento-item bento-item--img" data-clip-reveal>
+      <img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=700&q=80" alt="Pool overlooking the coast" loading="lazy">
+    </div>
+
+    <div class="bento-item bento-item--glass">
+      <div class="stat"><span class="stat__num" data-count="14">0</span><span class="stat__label">Cliffside villas</span></div>
+      <div class="stat"><span class="stat__num" data-count="40">0</span><span class="stat__label">Feet above the tide</span></div>
+      <div class="stat"><span class="stat__num" data-count="2019">0</span><span class="stat__label">Year we opened</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- VILLAS -->
+<section class="villas" id="villas">
+  <div class="villas__head">
+    <p class="section-tag">Stay</p>
+    <h2 class="villas__heading">Four ways to wake up close to nature</h2>
+  </div>
+
+  <div class="villas__grid" id="villasGrid">
+    <article class="villa-card">
+      <div class="villa-card__img"><img src="https://images.unsplash.com/photo-1602002418082-a4443e081dd1?auto=format&fit=crop&w=900&q=80" alt="Cliff Edge Suite" loading="lazy"></div>
+      <div class="villa-card__body">
+        <h3>Cliff Edge Suite</h3>
+        <p>A single glass wall between your bed and the drop. Private plunge pool, no neighbours in sight.</p>
+        <span class="villa-card__price">from LKR 62,000 / night</span>
+      </div>
+    </article>
+    <article class="villa-card">
+      <div class="villa-card__img"><img src="https://images.unsplash.com/photo-1615880484746-a134be9a6ecf?auto=format&fit=crop&w=900&q=80" alt="Basalt Villa" loading="lazy"></div>
+      <div class="villa-card__body">
+        <h3>Basalt Villa</h3>
+        <p>Two-storey, stone-walled, built into the original rock face. Sleeps four across two bedrooms.</p>
+        <span class="villa-card__price">from LKR 84,000 / night</span>
+      </div>
+    </article>
+    <article class="villa-card">
+      <div class="villa-card__img"><img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=900&q=80" alt="Garden Bungalow" loading="lazy"></div>
+      <div class="villa-card__body">
+        <h3>Garden Bungalow</h3>
+        <p>Set back from the edge, wrapped in frangipani. Quieter, cooler, closer to the kitchen garden.</p>
+        <span class="villa-card__price">from LKR 41,000 / night</span>
+      </div>
+    </article>
+    <article class="villa-card">
+      <div class="villa-card__img"><img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=900&q=80" alt="The Point Villa" loading="lazy"></div>
+      <div class="villa-card__body">
+        <h3>The Point Villa</h3>
+        <p>Our furthest villa out on the headland. Sunrise on one terrace, sunset on the other.</p>
+        <span class="villa-card__price">from LKR 110,000 / night</span>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- EXPERIENCES -->
+<section class="experiences" id="experiences">
+  <p class="section-tag section-tag--center">Experiences</p>
+  <h2 class="experiences__heading">Days here have a shape, not a schedule</h2>
+
+  <div class="experiences__grid">
+    <div class="exp-card" data-tilt>
+      <div class="exp-card__icon" aria-hidden="true">
+        <svg viewBox="0 0 48 48"><path d="M6 30c4-10 8-16 18-16s14 6 18 16" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="24" cy="14" r="4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+      </div>
+      <h3>Dawn boat, the day's catch</h3>
+      <p>Join the local fleet at 5:40am. Whatever comes up in the nets is on the table by lunch.</p>
+    </div>
+    <div class="exp-card" data-tilt>
+      <div class="exp-card__icon" aria-hidden="true">
+        <svg viewBox="0 0 48 48"><path d="M24 6v36M12 18c0 8 5 12 12 12s12-4 12-12" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+      </div>
+      <h3>Reef swim, low tide</h3>
+      <p>A shallow reef sits fifty metres off the rocks. We'll row you out and leave you to it.</p>
+    </div>
+    <div class="exp-card" data-tilt>
+      <div class="exp-card__icon" aria-hidden="true">
+        <svg viewBox="0 0 48 48"><rect x="10" y="10" width="28" height="28" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 20h28" stroke="currentColor" stroke-width="1.5"/></svg>
+      </div>
+      <h3>Long table, cliff edge</h3>
+      <p>Every Friday, one long table is set along the rock face for whoever's staying that week.</p>
+    </div>
+    <div class="exp-card" data-tilt>
+      <div class="exp-card__icon" aria-hidden="true">
+        <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="14" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M24 16v8l6 4" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+      </div>
+      <h3>Stone-room massage</h3>
+      <p>Two treatment rooms carved into the natural rock wall, cooled naturally by the stone.</p>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- REVIEWS -->
+<section class="reviews" id="reviews">
+  <p class="section-tag section-tag--center">Reviews</p>
+  <h2 class="reviews__heading">What guests say after they leave</h2>
+
+  <div class="reviews__grid">
+    <article class="review-card" data-reveal>
+      <div class="review-card__stars">★★★★★</div>
+      <p class="review-card__quote">The villa was carved right into the rock — we woke up to waves, not traffic. Booking on WhatsApp direct made everything so easy.</p>
+      <div class="review-card__author">
+        <span class="review-card__avatar">A</span>
+        <div>
+          <div class="review-card__name">Amara F.</div>
+          <div class="review-card__meta">Cliff Edge Suite · Colombo</div>
+        </div>
+      </div>
+    </article>
+
+    <article class="review-card" data-reveal>
+      <div class="review-card__stars">★★★★★</div>
+      <p class="review-card__quote">Stayed four nights in the Basalt Villa and didn't want to leave the cliff once. Staff arranged the dawn boat trip without us even asking twice.</p>
+      <div class="review-card__author">
+        <span class="review-card__avatar">R</span>
+        <div>
+          <div class="review-card__name">Ruwan D.</div>
+          <div class="review-card__meta">Basalt Villa · Kandy</div>
+        </div>
+      </div>
+    </article>
+
+    <article class="review-card" data-reveal>
+      <div class="review-card__stars">★★★★★</div>
+      <p class="review-card__quote">Quiet, private, and the Friday long table dinner on the rock face was the highlight of our trip. Already planning our next stay.</p>
+      <div class="review-card__author">
+        <span class="review-card__avatar">N</span>
+        <div>
+          <div class="review-card__name">Nadia P.</div>
+          <div class="review-card__meta">The Point Villa · Melbourne</div>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery" id="gallery">
+  <div class="gallery__head">
+    <div class="villas__head-text">
+      <p class="section-tag">Gallery</p>
+      <h2 class="gallery__heading">A few unstaged mornings</h2>
+    </div>
+    
+  </div>
+  <div class="gallery__track" id="galleryGrid">
+    <button class="g-item" data-reveal data-full="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=1600&q=85" data-caption="Pool at dusk">
+      <img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=700&q=80" alt="Pool at dusk" loading="lazy">
+      <span class="g-item__overlay"><span class="g-item__zoom">⤢</span><span class="g-item__caption">Pool at dusk</span></span>
+    </button>
+    <button class="g-item" data-reveal data-full="https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=1600&q=85" data-caption="Villa terrace">
+      <img src="https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=700&q=80" alt="Villa terrace" loading="lazy">
+      <span class="g-item__overlay"><span class="g-item__zoom">⤢</span><span class="g-item__caption">Villa terrace</span></span>
+    </button>
+    <button class="g-item" data-reveal data-full="https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?auto=format&fit=crop&w=1600&q=85" data-caption="Poolside stone steps">
+      <img src="https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?auto=format&fit=crop&w=700&q=80" alt="Poolside stone steps" loading="lazy">
+      <span class="g-item__overlay"><span class="g-item__zoom">⤢</span><span class="g-item__caption">Poolside stone steps</span></span>
+    </button>
+    <button class="g-item" data-reveal data-full="https://images.unsplash.com/photo-1615880484746-a134be9a6ecf?auto=format&fit=crop&w=1800&q=85" data-caption="Natural coastline near the resort">
+      <img src="https://images.unsplash.com/photo-1615880484746-a134be9a6ecf?auto=format&fit=crop&w=900&q=80" alt="Natural coastline near the resort" loading="lazy">
+      <span class="g-item__overlay"><span class="g-item__zoom">⤢</span><span class="g-item__caption">Natural coastline near the resort</span></span>
+    </button>
+    <button class="g-item" data-reveal data-full="https://images.unsplash.com/photo-1602002418082-a4443e081dd1?auto=format&fit=crop&w=1600&q=85" data-caption="Basalt Villa interior">
+      <img src="https://images.unsplash.com/photo-1602002418082-a4443e081dd1?auto=format&fit=crop&w=700&q=80" alt="Basalt Villa interior" loading="lazy">
+      <span class="g-item__overlay"><span class="g-item__zoom">⤢</span><span class="g-item__caption">Basalt Villa interior</span></span>
+    </button>
+    <button class="g-item" data-reveal data-full="https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=1600&q=85" data-caption="The Point Villa at sunset">
+      <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=700&q=80" alt="The Point Villa at sunset" loading="lazy">
+      <span class="g-item__overlay"><span class="g-item__zoom">⤢</span><span class="g-item__caption">The Point Villa at sunset</span></span>
+    </button>
+  </div>
+</section>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox__close" id="lightboxClose" aria-label="Close">✕</button>
+  <button class="lightbox__nav lightbox__nav--prev" id="lightboxPrev" aria-label="Previous">‹</button>
+  <figure class="lightbox__figure">
+    <img src="" alt="" id="lightboxImg">
+    <figcaption id="lightboxCaption"></figcaption>
+  </figure>
+  <button class="lightbox__nav lightbox__nav--next" id="lightboxNext" aria-label="Next">›</button>
+</div>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <p class="section-tag section-tag--center">Find Us</p>
+  <h2 class="contact__heading">Reach out, or come find the <span class="heading-accent">cliff yourself</span></h2>
+
+  <div class="contact__grid">
+    <a href="tel:+94771234567" class="contact-card" data-reveal>
+      <span class="contact-card__icon" aria-hidden="true">
+        <svg viewBox="0 0 48 48"><path d="M14 8h6l3 8-4 3c1.8 4 4.2 6.4 8.2 8.2l3-4 8 3v6c0 2-2 4-4 4C21 33.4 14.6 27 12 14c0-2 2-4 4-6z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+      </span>
+      <span class="contact-card__label">Call the front desk</span>
+      <span class="contact-card__value">+94 77 123 4567</span>
+      <span class="contact-card__hint">Tap to call →</span>
+    </a>
+
+    <a href="https://wa.me/94771234567" target="_blank" rel="noopener" class="contact-card" data-reveal>
+      <span class="contact-card__icon" aria-hidden="true">
+        <svg viewBox="0 0 32 32"><path fill="currentColor" d="M16 3C9 3 3.3 8.7 3.3 15.7c0 2.5.7 4.8 1.9 6.8L3 29l6.7-2.1c1.9 1 4.1 1.6 6.3 1.6 7 0 12.7-5.7 12.7-12.7C28.7 8.7 23 3 16 3zm0 23.1c-2 0-3.9-.5-5.6-1.5l-.4-.2-4 1.2 1.2-3.9-.3-.4a10.4 10.4 0 0 1-1.6-5.6C5.3 9.9 10.1 5.1 16 5.1S26.7 9.9 26.7 15.8 21.9 26.1 16 26.1zm5.8-7.7c-.3-.2-1.9-.9-2.2-1s-.5-.2-.7.2-.8 1-1 1.2-.4.2-.7.1a8.7 8.7 0 0 1-2.6-1.6 9.7 9.7 0 0 1-1.8-2.2c-.2-.3 0-.5.1-.7l.5-.6c.2-.2.2-.3.3-.5s0-.4 0-.5-.7-1.6-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.9-.8 2.2-1.5.3-.7.3-1.3.2-1.5 0-.1-.3-.2-.6-.4z"/></svg>
+      </span>
+      <span class="contact-card__label">Message on WhatsApp</span>
+      <span class="contact-card__value">+94 77 123 4567</span>
+      <span class="contact-card__hint">Usually replies within the hour →</span>
+    </a>
+
+    <a href="mailto:stay@vaelobay.com" class="contact-card" data-reveal>
+      <span class="contact-card__icon" aria-hidden="true">
+        <svg viewBox="0 0 48 48"><rect x="6" y="10" width="36" height="28" rx="3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M7 12l17 14 17-14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+      <span class="contact-card__label">Email us</span>
+      <span class="contact-card__value">stay@vaelobay.com</span>
+      <span class="contact-card__hint">Tap to email →</span>
+    </a>
+  </div>
+
+  <div class="contact-split">
+    <div class="contact-map">
+      <iframe
+        src="https://maps.google.com/maps?q=Ahangama,Galle,Sri%20Lanka&t=&z=13&ie=UTF8&iwloc=&output=embed"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        title="Map showing Vaelo Bay Resort in Ahangama, Sri Lanka"></iframe>
+    </div>
+
+    <div class="contact-info" data-reveal>
+      <div>
+        <h3>Find the resort</h3>
+        <p class="contact-info__note">Ahangama, Galle District, Sri Lanka — 20 minutes south of Galle Fort, right on the coast road.</p>
+      </div>
+      <div>
+        <div class="contact-info__row"><span>Front desk</span><span>7am – 10pm daily</span></div>
+        <div class="contact-info__row"><span>Check-in</span><span>2:00 PM</span></div>
+        <div class="contact-info__row"><span>Check-out</span><span>11:00 AM</span></div>
+        <div class="contact-info__row"><span>Nearest airport</span><span>Mattala (MRIA), 1.5h</span></div>
+      </div>
+      <a href="https://maps.google.com/?q=Ahangama,Galle,Sri+Lanka" target="_blank" rel="noopener" class="book__direct-link">
+        Open in Google Maps →
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- BOOKING -->
+<section class="book" id="book">
+  <div class="book__inner">
+    <div class="book__intro">
+      <p class="section-tag">Book a stay</p>
+      <h2 class="book__heading">Tell us the dates. We'll do the rest on WhatsApp.</h2>
+      <p class="book__body">No booking portals, no hold fees. Fill this in and it opens straight into a WhatsApp chat with our front desk — usually answered within the hour, Colombo time.</p>
+      <div class="book__direct">
+        <p>Prefer to type it yourself?</p>
+        <a href="https://wa.me/94771234567" target="_blank" rel="noopener" class="book__direct-link">
+          <svg viewBox="0 0 32 32" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M16 3C9 3 3.3 8.7 3.3 15.7c0 2.5.7 4.8 1.9 6.8L3 29l6.7-2.1c1.9 1 4.1 1.6 6.3 1.6 7 0 12.7-5.7 12.7-12.7C28.7 8.7 23 3 16 3zm0 23.1c-2 0-3.9-.5-5.6-1.5l-.4-.2-4 1.2 1.2-3.9-.3-.4a10.4 10.4 0 0 1-1.6-5.6C5.3 9.9 10.1 5.1 16 5.1S26.7 9.9 26.7 15.8 21.9 26.1 16 26.1zm5.8-7.7c-.3-.2-1.9-.9-2.2-1s-.5-.2-.7.2-.8 1-1 1.2-.4.2-.7.1a8.7 8.7 0 0 1-2.6-1.6 9.7 9.7 0 0 1-1.8-2.2c-.2-.3 0-.5.1-.7l.5-.6c.2-.2.2-.3.3-.5s0-.4 0-.5-.7-1.6-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.9-.8 2.2-1.5.3-.7.3-1.3.2-1.5 0-.1-.3-.2-.6-.4z"/></svg>
+          +94 77 123 4567
+        </a>
+      </div>
+    </div>
+
+    <form class="book__form" id="bookingForm">
+      <div class="field">
+        <label for="name">Your name</label>
+        <input type="text" id="name" name="name" required placeholder="Amara Fernando">
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="checkin">Check-in</label>
+          <input type="date" id="checkin" name="checkin" required>
+        </div>
+        <div class="field">
+          <label for="checkout">Check-out</label>
+          <input type="date" id="checkout" name="checkout" required>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="guests">Guests</label>
+          <select id="guests" name="guests">
+            <option>1 guest</option>
+            <option selected>2 guests</option>
+            <option>3 guests</option>
+            <option>4+ guests</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="villa">Villa</label>
+          <select id="villa" name="villa">
+            <option>Not sure yet</option>
+            <option>Cliff Edge Suite</option>
+            <option>Basalt Villa</option>
+            <option>Garden Bungalow</option>
+            <option>The Point Villa</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label for="notes">Anything else</label>
+        <textarea id="notes" name="notes" rows="3" placeholder="Anniversary trip, arriving late, dietary notes..."></textarea>
+      </div>
+      <button type="submit" class="btn btn--primary btn--submit" id="submitBtn">
+        <span class="btn__label">Send to WhatsApp</span>
+        <svg class="btn__icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
+      </button>
+      <p class="book__disclaimer">This opens WhatsApp with your details pre-filled. Nothing is charged or confirmed until our team replies.</p>
+    </form>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer__top">
+    <span class="nav__mark">Vaelo Bay</span>
+    <div class="footer__links">
+      <a href="#about">The Resort</a>
+      <a href="#villas">Villas</a>
+      <a href="#experiences">Experiences</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#contact">Contact</a>
+      <a href="#book">Book</a>
+    </div>
+  </div>
+  <div class="footer__bottom">
+    <p>Ahangama, Galle District, Sri Lanka</p>
+    <p>&copy; 2026 Vaelo Bay Resort</p>
+  </div>
+</footer>
+
+<a href="https://wa.me/94771234567" target="_blank" rel="noopener" class="wa-float" aria-label="Chat on WhatsApp">
+  <svg viewBox="0 0 32 32" width="26" height="26" aria-hidden="true"><path fill="currentColor" d="M16 3C9 3 3.3 8.7 3.3 15.7c0 2.5.7 4.8 1.9 6.8L3 29l6.7-2.1c1.9 1 4.1 1.6 6.3 1.6 7 0 12.7-5.7 12.7-12.7C28.7 8.7 23 3 16 3zm0 23.1c-2 0-3.9-.5-5.6-1.5l-.4-.2-4 1.2 1.2-3.9-.3-.4a10.4 10.4 0 0 1-1.6-5.6C5.3 9.9 10.1 5.1 16 5.1S26.7 9.9 26.7 15.8 21.9 26.1 16 26.1zm5.8-7.7c-.3-.2-1.9-.9-2.2-1s-.5-.2-.7.2-.8 1-1 1.2-.4.2-.7.1a8.7 8.7 0 0 1-2.6-1.6 9.7 9.7 0 0 1-1.8-2.2c-.2-.3 0-.5.1-.7l.5-.6c.2-.2.2-.3.3-.5s0-.4 0-.5-.7-1.6-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.9-.8 2.2-1.5.3-.7.3-1.3.2-1.5 0-.1-.3-.2-.6-.4z"/></svg>
+</a>
+
+<script src="script.js"></script>
+</body>
+</html>
