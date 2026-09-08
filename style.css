@@ -1,0 +1,1892 @@
+/* =====================================================================
+   VAELO BAY — STYLE GUIDE (read this first if you're new to CSS)
+   =====================================================================
+
+   1) HOW THE FILE IS LAID OUT
+      This file is split into sections, one per part of the page, in the
+      SAME ORDER they appear in index.html (top to bottom):
+      Tokens -> Nav -> Buttons -> Hero -> Resort/About -> Villas ->
+      Experiences -> Marquee -> Reviews -> Gallery -> Contact -> Booking
+      -> Footer -> WhatsApp float button -> Responsive (mobile) rules.
+      Each section starts with a banner line naming it, like:
+        ============ NAV ============
+      so you can Ctrl+F for "NAV" to jump straight there.
+
+   2) WHAT ARE THOSE "--xxx" THINGS IN :root?
+      They're CSS VARIABLES (also called "custom properties"). Instead of
+      typing the same color 40 times, we type it once inside :root{...}
+      and give it a name, e.g. --accent: #1C7A8C;
+      Then anywhere else in the file we can reuse it by writing:
+        color: var(--accent);
+      Benefit: change the color ONCE at the top, and it updates
+      everywhere it's used. This is the first place to look if you want
+      to re-theme the whole site.
+
+   3) NAMING PATTERN YOU'LL SEE A LOT (BEM-style)
+      Classes look like: .villa-card, .villa-card__body, .villa-card__price
+      - "villa-card"          -> the block (the whole card)
+      - "villa-card__body"    -> a piece INSIDE that block (double underscore)
+      - "btn--primary"        -> a variant/style of a block (double dash)
+      This is just a naming convention, not special CSS syntax — it just
+      keeps class names organized and easy to guess.
+
+   4) CLASSES THAT ARE TOGGLED BY JAVASCRIPT (script.js)
+      Some classes don't do anything until JS adds them to an element:
+      - .scrolled     -> added to <header class="nav"> once you scroll down
+      - .open         -> added when the mobile menu / lightbox is opened
+      - .in-view      -> added when an element scrolls into view (used for
+                         fade/slide-in animations on cards and images)
+      - .dragging     -> added to the gallery while the user is dragging it
+      - .sending      -> added to the submit button while the booking
+                         form is being sent to WhatsApp
+      If a style looks like it "never happens", check script.js — it's
+      probably added/removed there.
+
+   5) [data-reveal] AND [data-reveal-line] — the fade-in-on-load effect
+      Elements with these HTML attributes start invisible and slightly
+      moved down, then animate into place automatically (see the
+      "fadeUp" and "lineUp" @keyframes below). No JS needed for this
+      part — it just runs once when the page loads.
+
+   6) RESPONSIVE (MOBILE) RULES
+      Near the bottom you'll find:
+        @media (max-width:900px){ ... }   -> tablet & small laptop
+        @media (max-width:700px){ ... }   -> phones
+      Anything inside a @media block only applies when the browser
+      window is narrower than that width. Rules OUTSIDE @media apply to
+      every screen size (they're the "default" desktop look).
+
+   ===================================================================== */
+
+/* ============ TOKENS (design system: colors, fonts, easing) ============ */
+:root{
+  /* --- background colors, from lightest (page) to slightly darker (cards) --- */
+  --bg: #FBF8F2;         /* main page background (warm ivory, not stark white) */
+  --bg-card: #F1E8D8;    /* background for "alternate" sections, e.g. Villas, Booking */
+  --bg-elev: #E6D9C0;    /* a slightly deeper sand tone, for extra contrast if needed */
+
+  /* --- brand color (the ocean teal used for buttons, links, icons) --- */
+  --accent: #1C7A8C;               /* main brand color */
+  --accent-hover: #145F6E;         /* darker version, used on :hover states */
+  --accent-soft: rgba(28,122,140,0.12); /* same color, very transparent — used for soft glows/focus rings */
+
+  /* --- text colors --- */
+  --text: #22302B;        /* main body text color (dark, not pure black) */
+  --text-muted: #6E7A72;  /* lighter gray-green, for less important text like captions */
+
+  /* --- border / divider colors --- */
+  --line: #E6DECB;         /* subtle border color, used almost everywhere */
+  --line-strong: #D2C6A9;  /* a slightly darker border, for things that need to stand out a bit more */
+
+  /* --- fonts --- */
+  --serif: 'Fraunces', serif;    /* the elegant heading font (h1, h2, h3) */
+  --sans: 'Manrope', sans-serif; /* the everyday body/paragraph font */
+
+  /* --- animation timing --- */
+  --ease: cubic-bezier(.22,.61,.36,1); /* a custom "ease" curve so animations feel smooth, not robotic */
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--sans);
+  font-weight:400;
+  line-height:1.5;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+h1,h2,h3{
+  font-family:var(--serif);
+  font-weight:400;
+  letter-spacing:-0.01em;
+}
+
+::selection{
+  background:var(--accent);
+  color:#fff;
+}
+
+/* If the user's OS has "reduce motion" turned on (an accessibility
+   setting), kill all animations/transitions almost instantly instead
+   of respecting their normal speed. This is just good practice. */
+@media (prefers-reduced-motion: reduce){
+  *{
+    animation-duration:0.001ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:0.001ms !important;
+    scroll-behavior:auto !important;
+  }
+}
+
+
+
+.section-tag{
+  font-size:0.8rem;
+  color:var(--accent);
+  font-weight:700;
+  letter-spacing:0.02em;
+}
+
+.section-tag--center{
+  text-align:center;
+}
+
+.heading-accent{
+  color:var(--accent);
+  font-style:italic;
+}
+
+/* ============ NAV ============ */
+/* .nav is the fixed top bar. It starts transparent (see-through, so the
+   hero photo shows behind it). script.js adds the ".scrolled" class
+   once you scroll down 40px, which is what triggers the white
+   background + shadow below — that's the "solid navbar on scroll"
+   effect you see on most modern websites. */
+.nav{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  z-index:100;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:1.6rem 4vw;
+  transition:background .4s var(--ease), padding .4s var(--ease), border-color .4s var(--ease), box-shadow .4s var(--ease);
+  border-bottom:1px solid transparent;
+}
+
+.nav.scrolled{
+  background:#1C7A8C;
+  backdrop-filter:blur(10px);
+  padding:1rem 4vw;
+  border-color:rgba(28,122,140,0.12);
+  box-shadow:0 0.5px 6px whitesmoke;
+}
+
+.nav__mark{
+  font-family:var(--serif);
+  font-size:1.3rem;
+  letter-spacing:0.01em;
+  color:var(--text);
+}
+
+.nav.scrolled .nav__mark, .nav.scrolled .nav__links a{
+  color:#fff;
+}
+
+.nav:not(.scrolled) .nav__mark, .nav:not(.scrolled) .nav__links a:not(.nav__cta){
+  color:#fff;
+}
+
+.nav__links{
+  display:flex;
+  align-items:center;
+  gap:2.2rem;
+  font-size:0.92rem;
+}
+
+.nav__links a{
+  position:relative;
+  opacity:0.92;
+  transition:opacity .25s, color .3s;
+}
+
+.nav__links a:not(.nav__cta):after{
+  content:'';
+  position:absolute;
+  left:0;
+  bottom:-4px;
+  width:0;
+  height:1px;
+  background:var(--accent);
+  transition:width .3s var(--ease);
+}
+
+.nav__links a:not(.nav__cta):hover:after{
+  width:100%;
+}
+
+.nav__links a:hover{
+  opacity:1;
+}
+
+.nav__cta{
+  background: #22302B;
+  color:#fff;
+  padding:0.55rem 1.2rem;
+  border-radius:4px;
+  transition:background .3s, transform .3s;
+}
+
+.nav__cta:hover{
+  background:var(--accent-hover);
+  transform:translateY(-1px);
+}
+
+.nav__burger{
+  display:none;
+  background:none;
+  border:none;
+  width:28px;
+  height:20px;
+  position:relative;
+  cursor:pointer;
+  z-index:101;
+}
+
+.nav__burger span{
+  position:absolute;
+  left:0;
+  width:100%;
+  height:2px;
+  border-radius:2px;
+  background:var(--text);
+  transition:transform .3s var(--ease), opacity .3s;
+}
+
+.nav.scrolled .nav__burger span, .nav__burger.open span{
+  background:var(--text);
+}
+
+.nav:not(.scrolled):not(:has(.nav__burger.open)) .nav__burger span{
+  background:#fff;
+}
+
+.nav__burger span:first-child{
+  top:0;
+}
+
+.nav__burger span:last-child{
+  bottom:0;
+}
+
+.nav__burger.open span:first-child{
+  transform:translateY(9.5px) rotate(45deg);
+  background:var(--text);
+}
+
+.nav__burger.open span:last-child{
+  transform:translateY(-9.5px) rotate(-45deg);
+  background:var(--text);
+}
+
+.mobile-menu{
+  position:fixed;
+  inset:0;
+  background:var(--bg);
+  z-index:99;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  justify-content:center;
+  gap:1.6rem;
+  padding:8vw;
+  font-family:var(--serif);
+  font-size:2.2rem;
+  color:var(--text);
+  transform:translateY(-100%);
+  transition:transform .5s var(--ease);
+}
+
+.mobile-menu.open{
+  transform:translateY(0);
+}
+
+.mobile-menu a{
+  opacity:0;
+  transform:translateY(14px);
+  transition:opacity .4s var(--ease), transform .4s var(--ease);
+}
+
+.mobile-menu.open a{
+  opacity:1;
+  transform:translateY(0);
+}
+
+.mobile-menu.open a:nth-child(1){
+  transition-delay:.08s;
+}
+
+.mobile-menu.open a:nth-child(2){
+  transition-delay:.14s;
+}
+
+.mobile-menu.open a:nth-child(3){
+  transition-delay:.2s;
+}
+
+.mobile-menu.open a:nth-child(4){
+  transition-delay:.26s;
+}
+
+.mobile-menu.open a:nth-child(5){
+  transition-delay:.32s;
+}
+
+.mobile-menu.open a:nth-child(6){
+  transition-delay:.38s;
+}
+
+/* ============ BUTTONS ============ */
+.btn{
+  display:inline-flex;
+  align-items:center;
+  gap:0.6rem;
+  padding:0.9rem 1.7rem;
+  font-size:0.92rem;
+  font-weight:600;
+  border-radius:4px;
+  cursor:pointer;
+  border:1px solid transparent;
+  transition:transform .3s var(--ease), background .3s, color .3s, border-color .3s, box-shadow .3s;
+}
+
+.btn--primary{
+  background:var(--accent);
+  color:#fff;
+  box-shadow:0 6px 20px rgba(28,122,140,0.25);
+}
+
+.btn--primary:hover{
+  transform:translateY(-2px);
+  background:var(--accent-hover);
+  box-shadow:0 10px 26px rgba(28,122,140,0.32);
+}
+
+.btn--ghost{
+  border-color:rgba(255,255,255,0.5);
+  color:#fff;
+}
+
+.btn--ghost:hover{
+  border-color:#fff;
+  background:rgba(255,255,255,0.12);
+}
+
+/* ============ HERO — split layout: text left, photo right ============ */
+.hero{
+  position:relative;
+  min-height:100svh;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  overflow:hidden;
+}
+
+.hero__text{
+  position:relative;
+  z-index:2;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:7rem 4vw 4rem 6vw;
+  background:linear-gradient(160deg, var(--text) 0%, var(--accent-hover) 140%);
+  color:#fff;
+}
+
+.hero__media{
+  position:relative;
+  overflow:hidden;
+  will-change:transform;
+  min-height:280px;
+}
+
+.hero__media img{
+  transform:scale(1.12);
+  position:absolute;
+  inset:0;
+}
+
+.hero__media::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  z-index:1;
+  background:linear-gradient(180deg, rgba(10,16,26,0.35) 0%, rgba(10,16,26,0) 22%);
+}
+
+.hero__eyebrow{
+  font-size:0.85rem;
+  color:#B9E4DC;
+  margin-bottom:1.4rem;
+  letter-spacing:0.02em;
+  font-weight:600;
+}
+
+.hero__title{
+  font-size:clamp(2.4rem, 4.6vw, 4rem);
+  line-height:1.05;
+  font-weight:400;
+  color:#fff;
+  max-width:12ch;
+}
+
+.hero__title .line{
+  display:block;
+  overflow:hidden;
+}
+
+.hero__title .line span{
+  display:block;
+}
+
+.hero__title--em{
+  font-style:italic;
+  color:#9FE0D3;
+}
+
+.hero__sub{
+  margin-top:1.6rem;
+  max-width:38ch;
+  color:rgba(255,255,255,0.85);
+  font-size:1.05rem;
+}
+
+.hero__actions{
+  margin-top:2.4rem;
+  display:flex;
+  gap:1rem;
+  flex-wrap:wrap;
+}
+
+.hero__scroll{
+  margin-top:3.4rem;
+  display:flex;
+  align-items:center;
+  gap:0.8rem;
+  color:rgba(255,255,255,0.75);
+  font-size:0.78rem;
+}
+
+.hero__scroll span{
+  width:1px;
+  height:34px;
+  background:rgba(255,255,255,0.3);
+  position:relative;
+  overflow:hidden;
+}
+
+.hero__scroll span:after{
+  content:'';
+  position:absolute;
+  top:-100%;
+  left:0;
+  width:100%;
+  height:100%;
+  background:#fff;
+  animation:scrollLine 2.2s ease-in-out infinite;
+}
+
+@keyframes scrollLine{
+  0%{
+    top:-100%;
+  }
+  50%{
+    top:0;
+  }
+  100%{
+    top:100%;
+  }
+}
+
+/* Each hero heading line is wrapped in a <span> that starts pushed
+   down 110% (fully hidden below its own line) and slides up into
+   place. Each line gets a slightly later "animation-delay" below so
+   they appear one after another instead of all at once. */
+[data-reveal-line] span{
+  transform:translateY(110%);
+  animation:lineUp 0.9s var(--ease) forwards;
+}
+
+.hero__title .line:nth-child(1) span{
+  animation-delay:0.15s;
+}
+
+.hero__title .line:nth-child(2) span{
+  animation-delay:0.28s;
+}
+
+.hero__title .line:nth-child(3) span{
+  animation-delay:0.41s;
+}
+
+@keyframes lineUp{
+  to{
+    transform:translateY(0);
+  }
+}
+
+/* Generic "fade + slide up" reveal, used on lots of elements across
+   the page (just add the attribute data-reveal in the HTML to use
+   it). Starts invisible and 16px lower, then fades/slides into its
+   normal spot once, when the page finishes loading. */
+[data-reveal]{
+  opacity:0;
+  transform:translateY(16px);
+  animation:fadeUp 0.8s var(--ease) forwards;
+  animation-delay:0.6s;
+}
+
+.hero__actions[data-reveal]{
+  animation-delay:0.75s;
+}
+
+@keyframes fadeUp{
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+@media (max-width:900px){
+  .hero{
+    grid-template-columns:1fr;
+  }
+  .hero__media{
+    order:-1;
+    min-height:42vh;
+  }
+  .hero__text{
+    padding:3rem 6vw 4rem;
+  }
+  .hero__title{
+    max-width:none;
+  }
+}
+
+/* ============ THE RESORT — modern bento grid ============ */
+.resort{
+  padding:8rem 6vw;
+  max-width:1300px;
+  margin:0 auto;
+}
+
+.resort__head{
+  max-width:640px;
+  margin-bottom:3rem;
+}
+
+.resort__heading{
+  font-size:clamp(1.9rem, 3.4vw, 2.7rem);
+  margin-top:1rem;
+  line-height:1.15;
+}
+
+.resort__bento{
+  display:grid;
+  grid-template-columns:1.1fr 1fr 0.8fr;
+  grid-template-rows:180px 180px 180px;
+  gap:1.4rem;
+}
+
+.bento-item{
+  border-radius:16px;
+  overflow:hidden;
+  position:relative;
+  box-shadow:0 10px 30px rgba(27,36,48,0.06);
+  transition:box-shadow .35s var(--ease), transform .35s var(--ease);
+}
+
+/* clip-path:inset(0 100% 0 0) hides the ENTIRE right 100% of this box
+   (like a curtain covering the photo). script.js watches the page
+   scroll and adds ".in-view" once this element enters the viewport,
+   which changes the clip-path to inset(0 0% 0 0) — 0% hidden, i.e.
+   fully revealed. The transition makes that change look like the
+   photo "wipes in" from the left. The photo itself also zooms out
+   from scale(1.15) to scale(1) at the same time, for a nice parallax
+   feel. */
+.bento-item--tall{
+  grid-row:span 3;
+  grid-column:1;
+  clip-path:inset(0 100% 0 0);
+  transition:clip-path 1.1s var(--ease);
+}
+
+.bento-item--tall.in-view{
+  clip-path:inset(0 0% 0 0);
+}
+
+.bento-item--tall img{
+  transform:scale(1.15);
+  transition:transform 1.4s var(--ease);
+}
+
+.bento-item--tall.in-view img{
+  transform:scale(1);
+}
+
+.bento-item--tall:hover, .bento-item--img:hover{
+  box-shadow:0 20px 46px rgba(27,36,48,0.16);
+  transform:translateY(-4px);
+}
+
+.bento-item--text{
+  grid-column:2 / 4;
+  grid-row:1 / 3;
+  background:var(--bg-card);
+  padding:2.4rem 2.4rem 2.4rem 2.8rem;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:1.1rem;
+  border:1px solid var(--line);
+  position:relative;
+}
+
+.bento-item--text::before{
+  content:'';
+  position:absolute;
+  left:0;
+  top:2.4rem;
+  bottom:2.4rem;
+  width:3px;
+  background:var(--accent);
+  border-radius:3px;
+}
+
+.bento-item--img{
+  grid-column:2;
+  grid-row:3;
+  clip-path:inset(0 100% 0 0);
+  transition:clip-path 1.1s var(--ease) 0.15s, box-shadow .35s var(--ease), transform .35s var(--ease);
+}
+
+.bento-item--img.in-view{
+  clip-path:inset(0 0% 0 0);
+}
+
+.bento-item--img img{
+  transition:transform .6s var(--ease);
+}
+
+.bento-item--img:hover img{
+  transform:scale(1.08);
+}
+
+.bento-item--glass{
+  grid-column:3;
+  grid-row:3;
+  background:linear-gradient(150deg, var(--accent) 0%, var(--accent-hover) 100%);
+  color:#fff;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:1rem;
+  padding:1.6rem;
+  box-shadow:0 16px 34px rgba(28,122,140,0.28);
+}
+
+.bento-item--glass .stat{
+  display:flex;
+  align-items:baseline;
+  gap:0.5rem;
+}
+
+.bento-item--glass .stat__num{
+  font-size:1.5rem;
+  margin:0;
+  color:#fff;
+}
+
+.bento-item--glass .stat__label{
+  font-size:0.72rem;
+  color:rgba(255,255,255,0.8);
+}
+
+.bento-item__link{
+  color:var(--accent);
+  font-weight:700;
+  font-size:0.92rem;
+  margin-top:0.4rem;
+  display:inline-flex;
+  align-items:center;
+  gap:0.4rem;
+  transition:gap .25s var(--ease);
+}
+
+.bento-item__link:hover{
+  gap:0.7rem;
+}
+
+.about__body{
+  color:var(--text-muted);
+}
+
+/* These numbers (14 villas, 40 feet, 2019) start at 0 in the HTML.
+   script.js counts them up to their real value (using the
+   data-count="14" attribute) once they scroll into view. This CSS
+   only styles what they look like — the counting animation itself
+   is JavaScript, not CSS. */
+.stat__num{
+  display:inline-block;
+  font-family:var(--serif);
+  font-size:2.1rem;
+  color:var(--accent);
+}
+
+.stat__label{
+  font-size:0.8rem;
+  color:var(--text-muted);
+}
+
+@media (max-width:900px){
+  .resort__bento{
+    grid-template-columns:1fr;
+    grid-template-rows:none;
+  }
+  .bento-item--tall{
+    grid-column:1;
+    grid-row:auto;
+    height:280px;
+  }
+  .bento-item--text, .bento-item--img, .bento-item--glass{
+    grid-column:1;
+    grid-row:auto;
+  }
+  .bento-item--img{
+    height:220px;
+  }
+}
+
+/* ============ VILLAS — static grid, no scroll ============ */
+.villas{
+  padding:6rem 6vw 8rem;
+  background:var(--bg-card);
+}
+
+.villas__head{
+  max-width:640px;
+  margin:0 auto 3rem;
+  text-align:center;
+}
+
+.villas__heading{
+  font-family:var(--sans);
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:0.03em;
+  font-size:clamp(1.3rem,2.1vw,1.7rem);
+  margin-top:0.6rem;
+}
+
+.track-nav{
+  display:flex;
+  gap:0.7rem;
+  flex-shrink:0;
+}
+
+.track-nav__btn{
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  border:1px solid var(--line-strong);
+  background:#fff;
+  color:var(--text);
+  font-size:1.3rem;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:background .25s, color .25s, border-color .25s, transform .2s;
+}
+
+.track-nav__btn:hover{
+  background:var(--accent);
+  color:#fff;
+  border-color:var(--accent);
+}
+
+.track-nav__btn:active{
+  transform:scale(0.92);
+}
+
+.track-nav__btn:disabled{
+  opacity:0.35;
+  cursor:default;
+}
+
+.track-nav__btn:disabled:hover{
+  background:#fff;
+  color:var(--text);
+  border-color:var(--line-strong);
+}
+
+.villas__grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(260px,1fr));
+  gap:1.6rem;
+  max-width:1300px;
+  margin:0 auto;
+}
+
+.villa-card{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:8px;
+  overflow:hidden;
+  transition:box-shadow .3s, transform .3s;
+}
+
+.villa-card:hover{
+  box-shadow:0 16px 34px rgba(27,36,48,0.12);
+  transform:translateY(-4px);
+}
+
+.villa-card__img{
+  aspect-ratio:4/3;
+  overflow:hidden;
+}
+
+.villa-card__img img{
+  transition:transform .6s var(--ease);
+}
+
+.villa-card:hover .villa-card__img img{
+  transform:scale(1.06);
+}
+
+.villa-card__body{
+  padding:1.5rem;
+}
+
+.villa-card__body h3{
+  font-size:1.2rem;
+  margin-bottom:0.5rem;
+}
+
+.villa-card__body p{
+  color:var(--text-muted);
+  font-size:0.9rem;
+  margin-bottom:1rem;
+}
+
+.villa-card__price{
+  font-size:0.8rem;
+  color:var(--accent);
+  font-weight:600;
+}
+
+/* ============ EXPERIENCES — tilt cards ============ */
+.experiences{
+  padding:8rem 6vw;
+  text-align:center;
+}
+
+.experiences__heading{
+  font-size:clamp(1.8rem,3.2vw,2.5rem);
+  max-width:26ch;
+  margin:0.8rem auto 3.5rem;
+  font-style:italic;
+}
+
+/* auto-fit + minmax(230px,1fr) = "fit as many 230px+ columns as will
+   comfortably fit the row, and let them stretch to share leftover
+   space equally". This is what makes the grid go from 4 columns on a
+   wide screen down to 1 column on a phone WITHOUT needing a media
+   query — the grid does it automatically. */
+.experiences__grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(230px,1fr));
+  gap:1.4rem;
+  max-width:1200px;
+  margin:0 auto;
+}
+
+/* This card has the "data-tilt" attribute in the HTML. script.js reads
+   the mouse position over the card and rotates it slightly in 3D
+   (rotateX/rotateY) to follow the cursor — that's why
+   transform-style:preserve-3d is needed here. The opacity/transform
+   here (0 / translateY(24px)) is the card's HIDDEN starting state; it
+   fades in (see .exp-card.in-view) once scrolled into view. */
+.exp-card{
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:2.2rem 1.8rem;
+  text-align:left;
+  transform-style:preserve-3d;
+  transition:transform .15s var(--ease), border-color .3s, box-shadow .3s;
+  opacity:0;
+  transform:translateY(24px);
+}
+
+.exp-card.in-view{
+  opacity:1;
+  transform:translateY(0);
+  transition:opacity .7s var(--ease), transform .7s var(--ease);
+}
+
+.exp-card:hover{
+  border-color:var(--accent);
+  box-shadow:0 14px 30px rgba(27,36,48,0.08);
+}
+
+.exp-card__icon{
+  width:40px;
+  height:40px;
+  color:var(--accent);
+  margin-bottom:1.4rem;
+}
+
+.exp-card__icon svg{
+  width:100%;
+  height:100%;
+}
+
+.exp-card h3{
+  font-size:1.1rem;
+  margin-bottom:0.6rem;
+  font-weight:500;
+}
+
+.exp-card p{
+  color:var(--text-muted);
+  font-size:0.88rem;
+}
+
+/* ============ MARQUEE ============ */
+.marquee-section{
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  overflow:hidden;
+  padding:2.2rem 0;
+}
+
+.marquee__track{
+  display:flex;
+  gap:2rem;
+  white-space:nowrap;
+  width:max-content;
+  font-family:var(--serif);
+  font-size:1.5rem;
+  font-style:italic;
+  color:var(--text-muted);
+  animation:marquee 32s linear infinite;
+}
+
+.marquee__dot{
+  color:var(--accent);
+  font-style:normal;
+}
+
+@keyframes marquee{
+  from{
+    transform:translateX(0);
+  }
+  to{
+    transform:translateX(-50%);
+  }
+}
+
+.marquee-section:hover .marquee__track{
+  animation-play-state:paused;
+}
+
+/* ============ REVIEWS ============ */
+.reviews{
+  padding:8rem 6vw;
+  text-align:center;
+  background:var(--bg-card);
+}
+
+.reviews__heading{
+  font-size:clamp(1.8rem,3.2vw,2.5rem);
+  max-width:26ch;
+  margin:0.8rem auto 3.5rem;
+}
+
+.reviews__grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(260px,1fr));
+  gap:1.4rem;
+  max-width:1200px;
+  margin:0 auto;
+}
+
+.review-card{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:2rem 1.8rem;
+  text-align:left;
+  display:flex;
+  flex-direction:column;
+  gap:1rem;
+  opacity:0;
+  transform:translateY(24px);
+  box-shadow:0 10px 26px rgba(27,36,48,0.05);
+  transition:opacity .7s var(--ease), transform .35s var(--ease), box-shadow .35s var(--ease);
+}
+
+.review-card.in-view{
+  opacity:1;
+  transform:translateY(0);
+}
+
+.review-card:hover{
+  box-shadow:0 18px 38px rgba(27,36,48,0.12);
+  transform:translateY(-4px);
+}
+
+.review-card__stars{
+  color:var(--accent);
+  font-size:0.95rem;
+  letter-spacing:0.15em;
+}
+
+.review-card__quote{
+  color:var(--text);
+  font-size:0.94rem;
+  line-height:1.55;
+  flex:1;
+}
+
+.review-card__author{
+  display:flex;
+  align-items:center;
+  gap:0.7rem;
+}
+
+.review-card__avatar{
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  flex-shrink:0;
+  background:linear-gradient(150deg, var(--accent) 0%, var(--accent-hover) 100%);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:var(--serif);
+  font-size:0.95rem;
+}
+
+.review-card__name{
+  font-weight:700;
+  font-size:0.88rem;
+}
+
+.review-card__meta{
+  color:var(--text-muted);
+  font-size:0.78rem;
+}
+
+@media screen and (max-width: 900px) {
+    .reviews__grid {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 10px !important;
+        width: 100% !important;
+        
+    }
+
+    .review-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box;
+    }
+}
+
+
+/* ============ GALLERY — horizontal drag-scroll + lightbox ============ */
+.gallery{
+  padding:8rem 0;
+}
+
+.gallery__head{
+  padding:0 6vw;
+  margin-bottom:2.6rem;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:1.2rem;
+  max-width:1300px;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+.gallery__heading{
+  font-family:var(--sans);
+  font-weight:800;
+  letter-spacing:-0.01em;
+  font-size:clamp(1.5rem,2.6vw,2rem);
+  margin-top:0.6rem;
+  display:inline-block;
+  position:relative;
+}
+
+.gallery__heading::after{
+  content:'';
+  display:block;
+  width:56px;
+  height:3px;
+  background:var(--accent);
+  margin-top:0.7rem;
+  border-radius:2px;
+}
+
+/* This row scrolls sideways (overflow-x:auto) instead of wrapping.
+   script.js lets you click-and-drag it with the mouse like a carousel
+   (that's the "cursor:grab" hint, which becomes "grabbing" — see
+   .dragging below — while you're actually dragging it). On phones,
+   the CSS further down (@media max-width:700px) switches this to a
+   normal 2-column grid instead of a scrolling row. */
+
+/* =========================
+   RESORT GALLERY
+========================= */
+
+.resort-gallery {
+    width: 100%;
+    padding: 30px;
+    box-sizing: border-box;
+}
+.boder{background-color: #F1E8D8;
+        width:100%;}
+
+/* =========================
+   GALLERY GRID
+========================= */
+
+.gallery-grid {
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
+
+    display: grid;
+
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: 250px 250px;
+
+    gap: 15px;
+}
+
+
+/* =========================
+   PHOTO
+========================= */
+
+.gallery-photo {
+    position: relative;
+
+    overflow: hidden;
+
+    border-radius: 18px;
+
+    cursor: pointer;
+
+    background: #ddd;
+}
+
+
+/* IMAGE */
+
+.gallery-photo img {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+
+    transition:
+        transform 0.7s ease,
+        filter 0.7s ease;
+}
+
+
+/* =========================
+   BIG IMAGE
+========================= */
+
+.gallery-big {
+    grid-row: span 2;
+}
+
+
+/* =========================
+   HOVER
+========================= */
+
+.gallery-photo:hover img {
+    transform: scale(1.08);
+}
+
+.gallery-photo:hover {
+    box-shadow: 0 15px 35px rgba(0,0,0,0.18);
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 700px) {
+
+    .resort-gallery {
+        padding: 50px 15px;
+    }
+
+    .gallery-grid {
+
+        grid-template-columns: 1fr 1fr;
+
+        grid-template-rows:
+            260px
+            180px
+            180px;
+
+        gap: 10px;
+    }
+
+
+    /* BIG IMAGE */
+
+    .gallery-big {
+        grid-column: 1 / -1;
+        grid-row: auto;
+    }
+
+
+    .gallery-photo {
+        border-radius: 14px;
+    }
+}
+
+/* ============ CONTACT PAGE ============ */
+
+
+.contact{
+  background:var(--bg);
+}
+
+.contact__heading{
+  font-size:clamp(1.6rem,2.8vw,2.1rem);
+  text-align:center;
+  max-width:28ch;
+  margin:0.6rem auto 2.2rem;
+}
+
+
+/* =========================
+   CONTACT INFO
+========================= */
+
+.contact-info {
+    width: 100%;
+    max-width: 900px;
+
+    margin: 0 auto;
+
+    display: grid;
+
+    /* LAPTOP: 2 COLUMNS */
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 16px;
+
+    padding: 20px;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================
+   EACH CONTACT CARD
+========================= */
+
+.contact-item {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    gap: 16px;
+
+    padding: 18px 22px;
+
+    box-sizing: border-box;
+
+    /* WHITE CARD */
+    background: #ffffff;
+
+    border: 1px solid #e8e8e8;
+
+    border-radius: 16px;
+
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.10);
+
+    opacity: 0;
+
+    transform: translateY(30px);
+
+    animation: contactCard 0.7s ease forwards;
+
+    transition: all 0.4s ease;
+}
+
+
+/* =========================
+   STAGGER ANIMATION
+========================= */
+
+.contact-item:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.contact-item:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.contact-item:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.contact-item:nth-child(4) {
+    animation-delay: 0.4s;
+}
+
+.contact-item:nth-child(5) {
+    animation-delay: 0.5s;
+}
+
+.contact-item:nth-child(6) {
+    animation-delay: 0.6s;
+}
+
+
+/* =========================
+   ICON
+========================= */
+
+.contact-item > span:first-child {
+    width: 45px;
+    height: 45px;
+
+    min-width: 45px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #f3f3f3;
+
+    font-size: 21px;
+
+    transition: 0.4s ease;
+}
+
+
+/* =========================
+   TEXT
+========================= */
+
+.contact-item a,
+.contact-item > span:last-child {
+    color: #222;
+
+    text-decoration: none;
+
+    font-size: 16px;
+
+    font-weight: 500;
+
+    transition: 0.3s ease;
+}
+
+
+/* =========================
+   HOVER
+========================= */
+
+.contact-item:hover {
+    transform: translateY(-5px) scale(1.02);
+
+    background:#1C7A8C;
+
+    border-color: #d5d5d5;
+
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+
+.contact-item:hover > span:first-child {
+    transform: scale(1.1) rotate(5deg);
+
+    background: #eeeeee;
+}
+
+
+.contact-item:hover a {
+    letter-spacing: 0.3px;
+}
+
+
+/* =========================
+   ANIMATION
+========================= */
+
+@keyframes contactCard {
+
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+
+/* =========================
+   PHONE
+========================= */
+
+@media (max-width: 900px) {
+
+    .contact-info {
+        width: 94%;
+        max-width: 500px;
+
+        margin: 0 auto;
+
+        /* PHONE: ONE BY ONE */
+        grid-template-columns: 1fr;
+
+        gap: 13px;
+
+        padding: 15px 0;
+    }
+
+    .contact-item {
+        padding: 15px 17px;
+
+        border-radius: 14px;
+
+        gap: 13px;
+    }
+
+    .contact-item > span:first-child {
+        width: 40px;
+        height: 40px;
+
+        min-width: 40px;
+
+        font-size: 18px;
+    }
+
+    .contact-item a,
+    .contact-item > span:last-child {
+        font-size: 14px;
+    }
+}
+
+
+/* =========================
+   SMALL PHONE
+========================= */
+
+@media (max-width: 500px) {
+
+    .contact-info {
+        width: 92%;
+    }
+
+    .contact-item {
+        padding: 13px 15px;
+    }
+}
+
+
+
+
+/* ============ BOOKING ============ */
+/* This whole section is just a styled <form>. There is NO backend/
+   database here — script.js grabs the form values on submit, builds a
+   WhatsApp message out of them, and opens https://wa.me/... with that
+   message pre-filled. So "submitting" this form never sends data
+   anywhere by itself; it just hands the text off to WhatsApp. */
+.book{
+  padding:8rem 6vw;
+  background:var(--bg-card);
+}
+
+.book__inner{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:5vw;
+  max-width:1300px;
+  margin:0 auto;
+  align-items:start;
+}
+
+.book__heading{
+  font-family:var(--sans);
+  font-weight:800;
+  letter-spacing:0.01em;
+  font-size:clamp(1.4rem,2.4vw,2rem);
+  margin:1rem 0 1.4rem;
+  max-width:18ch;
+}
+
+.book__body{
+  color:var(--text-muted);
+  max-width:42ch;
+  margin-bottom:2.2rem;
+}
+
+.book__direct{
+  border:1px solid var(--line);
+  border-radius:8px;
+  background:#fff;
+  padding:1.4rem;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:1rem;
+  flex-wrap:wrap;
+}
+
+.book__direct p{
+  color:var(--text-muted);
+  font-size:0.85rem;
+}
+
+.book__direct-link{
+  display:inline-flex;
+  align-items:center;
+  gap:0.6rem;
+  color:var(--accent);
+  font-weight:700;
+  font-size:0.95rem;
+}
+
+.book__form{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:2.4rem;
+  display:flex;
+  flex-direction:column;
+  gap:1.3rem;
+  box-shadow:0 20px 50px rgba(27,36,48,0.06);
+}
+
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:0.5rem;
+  flex:1;
+}
+
+.field-row{
+  display:flex;
+  gap:1.2rem;
+}
+
+.field label{
+  font-size:0.78rem;
+  color:var(--text-muted);
+  font-weight:600;
+}
+
+.field input, .field select, .field textarea{
+  background:#fff;
+  border:1px solid var(--line);
+  color:var(--text);
+  padding:0.8rem 0.9rem;
+  font-family:var(--sans);
+  font-size:0.95rem;
+  border-radius:4px;
+  transition:border-color .3s, box-shadow .3s;
+}
+
+.field input:focus, .field select:focus, .field textarea:focus{
+  outline:none;
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px var(--accent-soft);
+}
+
+.field select{
+  appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6' fill='%2366707F'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right 0.9rem center;
+}
+
+.field textarea{
+  resize:vertical;
+}
+
+.btn--submit{
+  justify-content:center;
+  margin-top:0.4rem;
+  position:relative;
+  overflow:hidden;
+}
+
+.btn__icon{
+  transition:transform .4s var(--ease);
+}
+
+.btn--submit:hover .btn__icon{
+  transform:translate(4px,-3px);
+}
+
+.btn--submit.sending .btn__label{
+  opacity:0;
+}
+
+.btn--submit.sending .btn__icon{
+  animation:sendFly .6s var(--ease) forwards;
+}
+
+@keyframes sendFly{
+  0%{
+    transform:translate(0,0) rotate(0);
+    opacity:1;
+  }
+  70%{
+    transform:translate(60px,-40px) rotate(20deg);
+    opacity:0;
+  }
+  100%{
+    opacity:0;
+  }
+}
+
+.book__disclaimer{
+  font-size:0.76rem;
+  color:var(--text-muted);
+  text-align:center;
+}
+
+/* ============ FOOTER ============ */
+.footer{
+  padding:4rem 6vw 2rem;
+  border-top:1px solid var(--line);
+  background:#145F6E;
+}
+
+.footer__top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:1.4rem;
+  margin-bottom:2.4rem;
+}
+
+.footer__links{
+  display:flex;
+  gap:1.8rem;
+  font-size:0.88rem;
+  color:whitesmoke;
+}
+
+.footer__links a:hover{
+  color:var(--accent);
+}
+
+.footer__bottom{
+  display:flex;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:0.6rem;
+  font-size:0.78rem;
+  color:whitesmoke;
+}
+
+/* ============ WHATSAPP FLOAT ============ */
+.wa-float{
+  position:fixed;
+  bottom:1.8rem;
+  right:1.8rem;
+  z-index:90;
+  width:56px;
+  height:56px;
+  border-radius:50%;
+  background:#25D366;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 8px 24px rgba(27,36,48,0.25);
+  animation:floatPulse 2.6s ease-in-out infinite;
+}
+
+@keyframes floatPulse{
+  0%,100%{
+    transform:translateY(0);
+    box-shadow:0 8px 24px rgba(27,36,48,0.25);
+  }
+  50%{
+    transform:translateY(-6px);
+    box-shadow:0 14px 30px rgba(27,36,48,0.3);
+  }
+}
+
+/* ============ RESPONSIVE ============ */
+/* Everything from here down only applies once the browser window is
+   900px wide or narrower — roughly tablets and small laptops. This is
+   where the desktop nav links get hidden and the hamburger button
+   (.nav__burger) shows up instead. */
+@media (max-width:900px){
+  .nav__links{
+    display:none;
+  }
+  .nav__burger{
+    display:block;
+  }
+  .about, .book__inner{
+    grid-template-columns:1fr;
+  }
+  .about__media{
+    order:-1;
+  }
+  .gallery__grid{
+    grid-template-columns:repeat(2,1fr);
+    grid-auto-rows:150px;
+  }
+  .lightbox__nav{
+    width:38px;
+    height:38px;
+  }
+  .lightbox__nav--prev{
+    left:0.6rem;
+  }
+  .lightbox__nav--next{
+    right:0.6rem;
+  }
+  .gallery__head{
+    align-items:flex-start;
+  }
+  .field-row{
+    flex-direction:column;
+  }
+}
+
+/* Narrower still — 700px and below, i.e. phones. Notice this is a
+   SEPARATE @media block from the one above: rules in the 900px block
+   still apply here too (a phone is also "900px or narrower"), and
+   these extra rules layer on top of them for the smallest screens. */
+@media (max-width:700px){
+  .about, .villas__head, .experiences, .gallery, .book{
+    padding-left:6vw;
+    padding-right:6vw;
+  }
+  .about{
+    padding-top:6rem;
+    padding-bottom:6rem;
+  }
+  .book__form{
+    padding:1.6rem;
+  }
+  /* Stay & Experiences: 2 cards per row on phones instead of stacking 1-per-row */
+  .villas__grid, .experiences__grid{
+    grid-template-columns:repeat(2, 1fr);
+    gap:0.8rem;
+  }
+  .villa-card__body{
+    padding:0.9rem;
+  }
+  .villa-card__body h3{
+    font-size:0.95rem;
+    margin-bottom:0.3rem;
+  }
+  .villa-card__body p{
+    font-size:0.78rem;
+    margin-bottom:0.6rem;
+  }
+  .villa-card__price{
+    font-size:0.7rem;
+  }
+  .exp-card{
+    padding:1.4rem 1rem;
+  }
+  .exp-card__icon{
+    width:30px;
+    height:30px;
+    margin-bottom:0.8rem;
+  }
+  .exp-card h3{
+    font-size:0.92rem;
+  }
+  .exp-card p{
+    font-size:0.78rem;
+  }
+  .reviews__grid{
+    grid-template-columns:repeat(2, 1fr);
+    gap:0.8rem;
+  }
+  .review-card{
+    padding:1.2rem 1rem;
+  }
+  /* Gallery: 2 photos per row instead of horizontal scroll */
+  .gallery__track{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:0.7rem;
+    overflow-x:visible;
+    padding:0 6vw;
+    cursor:default;
+  }
+  .g-item{
+    flex:none;
+  }
+  /* Contact: 2 cards per row instead of stacking 1-per-row */
+  .contact__grid{
+    grid-template-columns:repeat(2, 1fr);
+    gap:0.8rem;
+  }
+  .contact-card{
+    padding:1.4rem 1.1rem;
+  }
+  .contact-card__icon{
+    width:44px;
+    height:44px;
+    margin-bottom:0.5rem;
+  }
+  .contact-card__icon svg{
+    width:20px;
+    height:20px;
+  }
+  .contact-card__label{
+    font-size:0.7rem;
+  }
+  .contact-card__value{
+    font-size:1rem;
+  }
+  .contact-card__hint{
+    font-size:0.76rem;
+  }
+}
