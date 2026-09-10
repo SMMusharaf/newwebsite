@@ -229,3 +229,35 @@ if (lightbox) {
     if (e.key === 'ArrowLeft') showPrev();
   });
 }
+const track = document.getElementById("galleryTrack");
+
+let items = Array.from(
+    document.querySelectorAll(".gallery-item")
+);
+
+function updateGallery() {
+
+    items.forEach(item => {
+        item.classList.remove("main-photo");
+    });
+
+    items[2].classList.add("main-photo");
+
+    items.forEach(item => {
+        track.appendChild(item);
+    });
+}
+
+function nextPhoto() {
+    const first = items.shift();
+    items.push(first);
+
+    updateGallery();
+}
+
+function prevPhoto() {
+    const last = items.pop();
+    items.unshift(last);
+
+    updateGallery();
+}
